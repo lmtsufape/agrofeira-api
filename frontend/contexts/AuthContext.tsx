@@ -8,6 +8,7 @@ interface AuthContextType {
   login: (token: string, username: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  isInitialized: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -15,12 +16,14 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("ecofeira_token");
     const storedUsername = localStorage.getItem("ecofeira_username");
     if (storedToken) setToken(storedToken);
     if (storedUsername) setUsername(storedUsername);
+    setIsInitialized(true);
   }, []);
 
   function login(token: string, username: string) {
@@ -38,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ token, username, login, logout, isAuthenticated: !!token }}>
+    <AuthContext.Provider value={{ token, username, login, logout, isAuthenticated: !!token, isInitialized }}>
       {children}
     </AuthContext.Provider>
   );

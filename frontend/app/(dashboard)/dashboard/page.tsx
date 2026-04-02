@@ -276,11 +276,6 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* Centro — só desktop */}
-        <span className="hidden md:flex items-center gap-1.5 text-white/60 text-sm relative z-10">
-          Sistema Ecofeira Protótipo
-        </span>
-
         {/* Direita */}
         <div className="flex items-center gap-2 md:gap-3 relative z-10">
           {username && (
