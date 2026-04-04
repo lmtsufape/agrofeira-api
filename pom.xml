@@ -11,8 +11,8 @@
 	<groupId>br.edu.ufape</groupId>
 	<artifactId>agrofeira</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>Agro Feira API</name>
+	<description>Sistema de Gestão Agroecológica</description>
 	<url/>
 	<licenses>
 		<license/>

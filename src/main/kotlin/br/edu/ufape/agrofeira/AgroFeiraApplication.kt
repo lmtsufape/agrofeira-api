@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class AgroFeiraApplication
 
 fun main(args: Array<String>) {
-	runApplication<AgroFeiraApplication>(*args)
+    runApplication<AgroFeiraApplication>(*args)
 }
