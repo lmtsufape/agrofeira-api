@@ -4,5 +4,5 @@ enum class StatusFeira {
     AGENDADA,
     EM_ANDAMENTO,
     ENCERRADA,
-    CANCELADA
+    CANCELADA,
 }

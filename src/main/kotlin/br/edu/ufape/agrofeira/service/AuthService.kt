@@ -48,7 +48,10 @@ class AuthService(
         return usuarioRepository.save(
             Usuario(
                 username = request.username,
-                senhaHash = passwordEncoder.encode(request.password),
+                senhaHash =
+                    passwordEncoder.encode(request.password)
+                        // TODO revisar isso aqui pelo amor de Deus
+                        ?: throw RuntimeException("Não foi possível criar a senha"),
                 perfil = "ADMIN",
             ),
         )

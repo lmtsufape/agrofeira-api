@@ -4,5 +4,5 @@ enum class StatusPedido {
     PENDENTE,
     CONFIRMADO,
     ENTREGUE,
-    CANCELADO
+    CANCELADO,
 }

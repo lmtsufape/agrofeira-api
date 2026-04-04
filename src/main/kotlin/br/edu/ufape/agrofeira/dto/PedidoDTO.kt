@@ -19,23 +19,24 @@ data class PedidoDTO(
     val taxaEntrega: BigDecimal,
     val valorProdutos: BigDecimal,
     val valorTotal: BigDecimal,
-    val itens: List<ItemPedidoDTO>
+    val itens: List<ItemPedidoDTO>,
 ) {
     companion object {
-        fun from(pedido: Pedido) = PedidoDTO(
-            id = pedido.id,
-            feiraId = pedido.feira.id,
-            feiraData = pedido.feira.dataHora,
-            clienteId = pedido.cliente.id,
-            clienteNome = pedido.cliente.nome,
-            comercianteVendedorId = pedido.comercianteVendedor.id,
-            comercianteVendedorNome = pedido.comercianteVendedor.nome,
-            status = pedido.status,
-            tipoRetirada = pedido.tipoRetirada,
-            taxaEntrega = pedido.taxaEntrega,
-            valorProdutos = pedido.valorProdutos,
-            valorTotal = pedido.valorTotal,
-            itens = pedido.itens.map { ItemPedidoDTO.from(it) }
-        )
+        fun from(pedido: Pedido) =
+            PedidoDTO(
+                id = pedido.id,
+                feiraId = pedido.feira.id,
+                feiraData = pedido.feira.dataHora,
+                clienteId = pedido.cliente.id,
+                clienteNome = pedido.cliente.nome,
+                comercianteVendedorId = pedido.comercianteVendedor.id,
+                comercianteVendedorNome = pedido.comercianteVendedor.nome,
+                status = pedido.status,
+                tipoRetirada = pedido.tipoRetirada,
+                taxaEntrega = pedido.taxaEntrega,
+                valorProdutos = pedido.valorProdutos,
+                valorTotal = pedido.valorTotal,
+                itens = pedido.itens.map { ItemPedidoDTO.from(it) },
+            )
     }
 }

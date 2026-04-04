@@ -7,14 +7,15 @@ data class ZonaEntregaDTO(
     val id: String,
     val bairro: String,
     val regiao: String?,
-    val taxa: BigDecimal
+    val taxa: BigDecimal,
 ) {
     companion object {
-        fun from(zona: ZonaEntrega) = ZonaEntregaDTO(
-            id = zona.id,
-            bairro = zona.bairro,
-            regiao = zona.regiao,
-            taxa = zona.taxa
-        )
+        fun from(zona: ZonaEntrega) =
+            ZonaEntregaDTO(
+                id = zona.id,
+                bairro = zona.bairro,
+                regiao = zona.regiao,
+                taxa = zona.taxa,
+            )
     }
 }

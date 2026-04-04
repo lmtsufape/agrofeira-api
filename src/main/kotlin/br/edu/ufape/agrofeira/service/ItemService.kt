@@ -7,26 +7,27 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ItemService(
-    private val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository,
 ) {
     fun listarTodos(): List<Item> = itemRepository.findAll()
 
-    fun buscarPorId(id: String): Item =
-        itemRepository.findById(id).orElseThrow { RuntimeException("Item não encontrado") }
+    fun buscarPorId(id: String): Item = itemRepository.findById(id).orElseThrow { RuntimeException("Item não encontrado") }
 
     @Transactional
-    fun criar(item: Item): Item =
-        itemRepository.save(item)
+    fun criar(item: Item): Item = itemRepository.save(item)
 
     @Transactional
-    fun atualizar(id: String, item: Item): Item {
+    fun atualizar(
+        id: String,
+        item: Item,
+    ): Item {
         val existente = buscarPorId(id)
         return itemRepository.save(
             existente.copy(
                 nome = item.nome,
                 unidadeMedida = item.unidadeMedida,
-                precoBase = item.precoBase
-            )
+                precoBase = item.precoBase,
+            ),
         )
     }
 }

@@ -9,12 +9,9 @@ data class ZonaEntrega(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: String = "",
-
     @Column(nullable = false)
     val bairro: String = "",
-
     val regiao: String? = null,
-
     @Column(nullable = false)
-    val taxa: BigDecimal = BigDecimal.ZERO
+    val taxa: BigDecimal = BigDecimal.ZERO,
 )

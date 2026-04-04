@@ -11,18 +11,22 @@ import java.time.LocalDateTime
 @Service
 class PagamentoService(
     private val pagamentoRepository: PagamentoRepository,
-    private val pedidoRepository: PedidoRepository
+    private val pedidoRepository: PedidoRepository,
 ) {
-    fun listarPorPedido(pedidoId: String): List<Pagamento> =
-        pagamentoRepository.findByPedidoId(pedidoId)
+    fun listarPorPedido(pedidoId: String): List<Pagamento> = pagamentoRepository.findByPedidoId(pedidoId)
 
-    fun buscarPorId(id: String): Pagamento =
-        pagamentoRepository.findById(id).orElseThrow { RuntimeException("Pagamento não encontrado") }
+    fun buscarPorId(id: String): Pagamento = pagamentoRepository.findById(id).orElseThrow { RuntimeException("Pagamento não encontrado") }
 
     @Transactional
-    fun registrar(pedidoId: String, metodo: String, valor: BigDecimal): Pagamento {
-        val pedido = pedidoRepository.findById(pedidoId)
-            .orElseThrow { RuntimeException("Pedido não encontrado") }
+    fun registrar(
+        pedidoId: String,
+        metodo: String,
+        valor: BigDecimal,
+    ): Pagamento {
+        val pedido =
+            pedidoRepository
+                .findById(pedidoId)
+                .orElseThrow { RuntimeException("Pedido não encontrado") }
 
         return pagamentoRepository.save(
             Pagamento(
@@ -30,8 +34,8 @@ class PagamentoService(
                 valor = valor,
                 metodo = metodo,
                 status = "PAGO",
-                pagoEm = LocalDateTime.now()
-            )
+                pagoEm = LocalDateTime.now(),
+            ),
         )
     }
 }

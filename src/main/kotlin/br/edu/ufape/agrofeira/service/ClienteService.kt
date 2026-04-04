@@ -7,26 +7,27 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ClienteService(
-    private val clienteRepository: ClienteRepository
+    private val clienteRepository: ClienteRepository,
 ) {
     fun listarTodos(): List<Cliente> = clienteRepository.findAll()
 
-    fun buscarPorId(id: String): Cliente =
-        clienteRepository.findById(id).orElseThrow { RuntimeException("Cliente não encontrado") }
+    fun buscarPorId(id: String): Cliente = clienteRepository.findById(id).orElseThrow { RuntimeException("Cliente não encontrado") }
 
     @Transactional
-    fun criar(cliente: Cliente): Cliente =
-        clienteRepository.save(cliente)
+    fun criar(cliente: Cliente): Cliente = clienteRepository.save(cliente)
 
     @Transactional
-    fun atualizar(id: String, cliente: Cliente): Cliente {
+    fun atualizar(
+        id: String,
+        cliente: Cliente,
+    ): Cliente {
         val existente = buscarPorId(id)
         return clienteRepository.save(
             existente.copy(
                 nome = cliente.nome,
                 telefone = cliente.telefone,
-                descricao = cliente.descricao
-            )
+                descricao = cliente.descricao,
+            ),
         )
     }
 }

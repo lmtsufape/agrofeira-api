@@ -7,14 +7,15 @@ data class ItemDTO(
     val id: String,
     val nome: String,
     val unidadeMedida: String,
-    val precoBase: BigDecimal
+    val precoBase: BigDecimal,
 ) {
     companion object {
-        fun from(item: Item) = ItemDTO(
-            id = item.id,
-            nome = item.nome,
-            unidadeMedida = item.unidadeMedida,
-            precoBase = item.precoBase
-        )
+        fun from(item: Item) =
+            ItemDTO(
+                id = item.id,
+                nome = item.nome,
+                unidadeMedida = item.unidadeMedida,
+                precoBase = item.precoBase,
+            )
     }
 }

@@ -1,6 +1,9 @@
 package br.edu.ufape.agrofeira.service
 
-import br.edu.ufape.agrofeira.domain.entity.*
+import br.edu.ufape.agrofeira.domain.entity.EstoqueBanca
+import br.edu.ufape.agrofeira.domain.entity.ItemPedido
+import br.edu.ufape.agrofeira.domain.entity.Pedido
+import br.edu.ufape.agrofeira.domain.entity.RateioItem
 import br.edu.ufape.agrofeira.domain.enums.StatusPedido
 import br.edu.ufape.agrofeira.domain.enums.TipoRetirada
 import br.edu.ufape.agrofeira.domain.repository.*
@@ -16,15 +19,13 @@ class PedidoService(
     private val comercianteRepository: ComercianteRepository,
     private val itemRepository: ItemRepository,
     private val estoqueBancaRepository: EstoqueBancaRepository,
-    private val feiraComercianteRepository: FeiraComercianteRepository
+    private val feiraComercianteRepository: FeiraComercianteRepository,
 ) {
     fun listarTodos(): List<Pedido> = pedidoRepository.findAll()
 
-    fun listarPorFeira(feiraId: String): List<Pedido> =
-        pedidoRepository.findByFeiraId(feiraId)
+    fun listarPorFeira(feiraId: String): List<Pedido> = pedidoRepository.findByFeiraId(feiraId)
 
-    fun buscarPorId(id: String): Pedido =
-        pedidoRepository.findById(id).orElseThrow { RuntimeException("Pedido não encontrado") }
+    fun buscarPorId(id: String): Pedido = pedidoRepository.findById(id).orElseThrow { RuntimeException("Pedido não encontrado") }
 
     @Transactional
     fun criar(
@@ -33,50 +34,62 @@ class PedidoService(
         comercianteVendedorId: String,
         tipoRetirada: TipoRetirada,
         taxaEntrega: BigDecimal,
-        itens: List<Pair<String, BigDecimal>>
+        itens: List<Pair<String, BigDecimal>>,
     ): Pedido {
-        val feira = feiraRepository.findById(feiraId)
-            .orElseThrow { RuntimeException("Feira não encontrada") }
-        val cliente = clienteRepository.findById(clienteId)
-            .orElseThrow { RuntimeException("Cliente não encontrado") }
-        val comercianteVendedor = comercianteRepository.findById(comercianteVendedorId)
-            .orElseThrow { RuntimeException("Comerciante não encontrado") }
+        val feira =
+            feiraRepository
+                .findById(feiraId)
+                .orElseThrow { RuntimeException("Feira não encontrada") }
+        val cliente =
+            clienteRepository
+                .findById(clienteId)
+                .orElseThrow { RuntimeException("Cliente não encontrado") }
+        val comercianteVendedor =
+            comercianteRepository
+                .findById(comercianteVendedorId)
+                .orElseThrow { RuntimeException("Comerciante não encontrado") }
 
-        val itensList = itens.map { (itemId, quantidade) ->
-            val item = itemRepository.findById(itemId)
-                .orElseThrow { RuntimeException("Item não encontrado") }
-            Pair(item, quantidade)
-        }
+        val itensList =
+            itens.map { (itemId, quantidade) ->
+                val item =
+                    itemRepository
+                        .findById(itemId)
+                        .orElseThrow { RuntimeException("Item não encontrado") }
+                Pair(item, quantidade)
+            }
 
-        val valorProdutos = itensList.sumOf { (item, quantidade) ->
-            item.precoBase.multiply(quantidade)
-        }
+        val valorProdutos =
+            itensList.sumOf { (item, quantidade) ->
+                item.precoBase.multiply(quantidade)
+            }
         val valorTotal = valorProdutos.add(taxaEntrega)
 
         // Primeiro salva o pedido sem itens
-        val pedido = pedidoRepository.save(
-            Pedido(
-                feira = feira,
-                cliente = cliente,
-                comercianteVendedor = comercianteVendedor,
-                tipoRetirada = tipoRetirada,
-                taxaEntrega = taxaEntrega,
-                valorProdutos = valorProdutos,
-                valorTotal = valorTotal,
-                status = StatusPedido.PENDENTE
+        val pedido =
+            pedidoRepository.save(
+                Pedido(
+                    feira = feira,
+                    cliente = cliente,
+                    comercianteVendedor = comercianteVendedor,
+                    tipoRetirada = tipoRetirada,
+                    taxaEntrega = taxaEntrega,
+                    valorProdutos = valorProdutos,
+                    valorTotal = valorTotal,
+                    status = StatusPedido.PENDENTE,
+                ),
             )
-        )
 
         // Depois salva os itens com o pedido já persistido
-        val itensPedido = itensList.map { (item, quantidade) ->
-            ItemPedido(
-                pedido = pedido,
-                item = item,
-                quantidade = quantidade,
-                valorUnitario = item.precoBase,
-                valorTotal = item.precoBase.multiply(quantidade)
-            )
-        }
+        val itensPedido =
+            itensList.map { (item, quantidade) ->
+                ItemPedido(
+                    pedido = pedido,
+                    item = item,
+                    quantidade = quantidade,
+                    valorUnitario = item.precoBase,
+                    valorTotal = item.precoBase.multiply(quantidade),
+                )
+            }
 
         pedido.itens.addAll(itensPedido)
         return pedidoRepository.save(pedido)
@@ -87,11 +100,12 @@ class PedidoService(
     fun consultarDisponibilidadeParaRateio(pedidoId: String): Map<String, List<EstoqueBanca>> {
         val pedido = buscarPorId(pedidoId)
         return pedido.itens.associate { itemPedido ->
-            itemPedido.item.nome to estoqueBancaRepository
-                .findDisponiveisPorFeiraEItemOrdenadoPorMenosVendido(
-                    pedido.feira.id,
-                    itemPedido.item.id
-                )
+            itemPedido.item.nome to
+                estoqueBancaRepository
+                    .findDisponiveisPorFeiraEItemOrdenadoPorMenosVendido(
+                        pedido.feira.id,
+                        itemPedido.item.id,
+                    )
         }
     }
 
@@ -99,7 +113,7 @@ class PedidoService(
     @Transactional
     fun confirmarRateio(
         pedidoId: String,
-        rateio: Map<String, List<Pair<String, BigDecimal>>>
+        rateio: Map<String, List<Pair<String, BigDecimal>>>,
     ): Pedido {
         val pedido = buscarPorId(pedidoId)
 
@@ -107,14 +121,16 @@ class PedidoService(
             val alocacoes = rateio[itemPedido.id] ?: return@forEach
 
             alocacoes.forEach { (estoqueBancaId, quantidade) ->
-                val estoque = estoqueBancaRepository.findById(estoqueBancaId)
-                    .orElseThrow { RuntimeException("Estoque não encontrado") }
+                val estoque =
+                    estoqueBancaRepository
+                        .findById(estoqueBancaId)
+                        .orElseThrow { RuntimeException("Estoque não encontrado") }
 
                 // Decrementa o estoque disponível
                 estoqueBancaRepository.save(
                     estoque.copy(
-                        quantidadeReservada = estoque.quantidadeReservada.add(quantidade)
-                    )
+                        quantidadeReservada = estoque.quantidadeReservada.add(quantidade),
+                    ),
                 )
 
                 // Atualiza o total vendido da banca
@@ -122,8 +138,8 @@ class PedidoService(
                 val valorAlocado = estoque.item.precoBase.multiply(quantidade)
                 feiraComercianteRepository.save(
                     feiraComercianteEntity.copy(
-                        totalVendido = feiraComercianteEntity.totalVendido.add(valorAlocado)
-                    )
+                        totalVendido = feiraComercianteEntity.totalVendido.add(valorAlocado),
+                    ),
                 )
 
                 // Registra o rateio
@@ -132,8 +148,8 @@ class PedidoService(
                         itemPedido = itemPedido,
                         estoqueBanca = estoque,
                         quantidadeAlocada = quantidade,
-                        valorAlocado = valorAlocado
-                    )
+                        valorAlocado = valorAlocado,
+                    ),
                 )
             }
         }
@@ -142,7 +158,10 @@ class PedidoService(
     }
 
     @Transactional
-    fun atualizarStatus(id: String, status: StatusPedido): Pedido {
+    fun atualizarStatus(
+        id: String,
+        status: StatusPedido,
+    ): Pedido {
         val pedido = buscarPorId(id)
         return pedidoRepository.save(pedido.copy(status = status))
     }

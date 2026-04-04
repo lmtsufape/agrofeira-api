@@ -11,18 +11,19 @@ data class EstoqueBancaDTO(
     val itemNome: String,
     val quantidadeDisponivel: BigDecimal,
     val quantidadeReservada: BigDecimal,
-    val totalVendidoBanca: BigDecimal
+    val totalVendidoBanca: BigDecimal,
 ) {
     companion object {
-        fun from(estoque: EstoqueBanca) = EstoqueBancaDTO(
-            id = estoque.id,
-            comercianteId = estoque.feiraComercianteEntity.comerciante.id,
-            comercianteNome = estoque.feiraComercianteEntity.comerciante.nome,
-            itemId = estoque.item.id,
-            itemNome = estoque.item.nome,
-            quantidadeDisponivel = estoque.quantidadeDisponivel,
-            quantidadeReservada = estoque.quantidadeReservada,
-            totalVendidoBanca = estoque.feiraComercianteEntity.totalVendido
-        )
+        fun from(estoque: EstoqueBanca) =
+            EstoqueBancaDTO(
+                id = estoque.id,
+                comercianteId = estoque.feiraComercianteEntity.comerciante.id,
+                comercianteNome = estoque.feiraComercianteEntity.comerciante.nome,
+                itemId = estoque.item.id,
+                itemNome = estoque.item.nome,
+                quantidadeDisponivel = estoque.quantidadeDisponivel,
+                quantidadeReservada = estoque.quantidadeReservada,
+                totalVendidoBanca = estoque.feiraComercianteEntity.totalVendido,
+            )
     }
 }

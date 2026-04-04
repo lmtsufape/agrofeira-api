@@ -7,14 +7,15 @@ data class FeiraComercianteDTO(
     val id: String,
     val comercianteId: String,
     val comercianteNome: String,
-    val totalVendido: BigDecimal
+    val totalVendido: BigDecimal,
 ) {
     companion object {
-        fun from(fc: FeiraComercianteEntity) = FeiraComercianteDTO(
-            id = fc.id,
-            comercianteId = fc.comerciante.id,
-            comercianteNome = fc.comerciante.nome,
-            totalVendido = fc.totalVendido
-        )
+        fun from(fc: FeiraComercianteEntity) =
+            FeiraComercianteDTO(
+                id = fc.id,
+                comercianteId = fc.comerciante.id,
+                comercianteNome = fc.comerciante.nome,
+                totalVendido = fc.totalVendido,
+            )
     }
 }

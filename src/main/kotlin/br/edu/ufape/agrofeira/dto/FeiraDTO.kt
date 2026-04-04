@@ -9,15 +9,16 @@ data class FeiraDTO(
     val dataHora: LocalDateTime,
     val status: StatusFeira,
     val comerciantes: List<FeiraComercianteDTO>,
-    val itens: List<ItemDTO>
+    val itens: List<ItemDTO>,
 ) {
     companion object {
-        fun from(feira: Feira) = FeiraDTO(
-            id = feira.id,
-            dataHora = feira.dataHora,
-            status = feira.status,
-            comerciantes = feira.comerciantes.map { FeiraComercianteDTO.from(it) },
-            itens = feira.itens.map { ItemDTO.from(it.item) }
-        )
+        fun from(feira: Feira) =
+            FeiraDTO(
+                id = feira.id,
+                dataHora = feira.dataHora,
+                status = feira.status,
+                comerciantes = feira.comerciantes.map { FeiraComercianteDTO.from(it) },
+                itens = feira.itens.map { ItemDTO.from(it.item) },
+            )
     }
 }

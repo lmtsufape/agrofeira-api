@@ -7,15 +7,16 @@ data class ComercianteDTO(
     val nome: String,
     val telefone: String?,
     val descricao: String?,
-    val itens: List<ItemDTO>
+    val itens: List<ItemDTO>,
 ) {
     companion object {
-        fun from(comerciante: Comerciante) = ComercianteDTO(
-            id = comerciante.id,
-            nome = comerciante.nome,
-            telefone = comerciante.telefone,
-            descricao = comerciante.descricao,
-            itens = comerciante.itens.map { ItemDTO.from(it) }
-        )
+        fun from(comerciante: Comerciante) =
+            ComercianteDTO(
+                id = comerciante.id,
+                nome = comerciante.nome,
+                telefone = comerciante.telefone,
+                descricao = comerciante.descricao,
+                itens = comerciante.itens.map { ItemDTO.from(it) },
+            )
     }
 }

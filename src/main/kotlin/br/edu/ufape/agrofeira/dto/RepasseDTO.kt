@@ -15,20 +15,23 @@ data class RepasseDTO(
     val taxaAssociacao: BigDecimal,
     val valorLiquido: BigDecimal,
     val status: StatusRepasse,
-    val repassadoEm: LocalDateTime?
+    val repassadoEm: LocalDateTime?,
 ) {
     companion object {
-        fun from(repasse: Repasse) = RepasseDTO(
-            id = repasse.id,
-            feiraId = repasse.feiraComercianteEntity.feira.id,
-            feiraData = repasse.feiraComercianteEntity.feira.dataHora.toString(),
-            comercianteId = repasse.feiraComercianteEntity.comerciante.id,
-            comercianteNome = repasse.feiraComercianteEntity.comerciante.nome,
-            valorBruto = repasse.valorBruto,
-            taxaAssociacao = repasse.taxaAssociacao,
-            valorLiquido = repasse.valorLiquido,
-            status = repasse.status,
-            repassadoEm = repasse.repassadoEm
-        )
+        fun from(repasse: Repasse) =
+            RepasseDTO(
+                id = repasse.id,
+                feiraId = repasse.feiraComercianteEntity.feira.id,
+                feiraData =
+                    repasse.feiraComercianteEntity.feira.dataHora
+                        .toString(),
+                comercianteId = repasse.feiraComercianteEntity.comerciante.id,
+                comercianteNome = repasse.feiraComercianteEntity.comerciante.nome,
+                valorBruto = repasse.valorBruto,
+                taxaAssociacao = repasse.taxaAssociacao,
+                valorLiquido = repasse.valorLiquido,
+                status = repasse.status,
+                repassadoEm = repasse.repassadoEm,
+            )
     }
 }
